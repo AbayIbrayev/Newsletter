@@ -23,5 +23,41 @@ app.post("/", (req, res) => {
     lastName = req.body.lName,
     email = req.body.email;
 
-  console.log(firstName, lastName, email);
+  let data = {
+    members: [{
+      email_address: email,
+      status: "subscribed",
+      merge_fields: {
+        FNAME: firstName,
+        LNAME: lastName
+      }
+    }]
+  };
+
+  let jsonData = JSON.stringify(data);
+
+  let options = {
+    url: 'https://usX.api.mailchimp.com/3.0/lists/UNIQUE_ID',
+    method: "POST",
+    headers: {
+      "Authorization": "USERNAME API_KEY"
+    },
+    body: jsonData
+  };
+
+  request(options, function (error, response, body) {
+    if (error) {
+      res.send("There was an error with signing up, please try again!");
+    } else {
+      if (res.statusCode == 200) {
+        res.sendFile(__dirname + "/success.html");
+      } else {
+        res.sendFile(__dirname + "/failure.html");
+      }
+    }
+  });
+});
+
+app.post("/failure", (res, req) => {
+  res.sendFile(__dirname + "/signup.html");
 });
