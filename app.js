@@ -47,7 +47,7 @@ app.post("/", (req, res) => {
 
   request(options, function (error, response, body) {
     if (error) {
-      res.send("There was an error with signing up, please try again!");
+      res.sendFile(__dirname + "/failure.html");
     } else {
       if (res.statusCode == 200) {
         res.sendFile(__dirname + "/success.html");
@@ -58,6 +58,6 @@ app.post("/", (req, res) => {
   });
 });
 
-app.post("/failure", (res, req) => {
+app.post("/failure", (req, res) => {
   res.sendFile(__dirname + "/signup.html");
 });
